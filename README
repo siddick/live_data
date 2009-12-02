@@ -1,13 +1,39 @@
-LiveData
-========
+== LiveData
+  LiveData is a Rails Plugin. This plugim can be used to implement the applications like chat, live process montior, etc.,
 
-Introduction goes here.
+== Installation
+  Step 1 :-
+	./script/plugin install git://github.com/siddick/LiveData.git
+  Step 2 :-
+	Add the following configuration in the config/environments/development.rb, config/environments/production.rb and config/environments/test.rb
+		config.threadsafe!
 
+== Example
+	Class MainController < ApplicationController
 
-Example
-=======
+	  def get_msg
+	    user_id = params[:id] || "test"
+	    chat = LiveData.get('chat')
+	    user = chat.get_user( user_id )
+	    render :text => user.read
+	  end
 
-Example goes here.
+	  def send_msg
+	    user_id = params[:id] || "test"
+	    message = params[:msg] || "Nothing"
+	    chat = LiveData.get('chat')
+	    user = chat.get_user( user_id )
+	    user.write( message )
+	    render :text => 'Finesh'
+	  end
+	end
 
+	== Run Webrick Server
+		ruby script/server -b 0.0.0.0 -p 3000
+	== Browser
+		Open two tabs in the web browser
+		First tab :-
+			http://localhost:3000/main/get_msg/tester
+		Second Tab :-
+			http://localhost:3000/main/send_msg/tester?msg=Hello World
 
-Copyright (c) 2009 [name of plugin creator], released under the MIT license
