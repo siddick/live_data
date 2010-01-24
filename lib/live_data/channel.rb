@@ -1,6 +1,6 @@
 
 module LiveData
-	class LiveDataPlace
+	class Channel
 		def initialize( name )
 			@name 	= name 
 			@users  = {}
@@ -21,7 +21,7 @@ module LiveData
 
 		def register_user( name )
 			unless( @users[name] ) 
-				@users[name] = LiveData::LiveDataUser.new( self, name )
+				@users[name] = LiveData::User.new( self, name )
 			end
 			return @users[name]
 		end
@@ -32,7 +32,7 @@ module LiveData
 
 		def register_group( name )
 			unless( @groups[name] ) 
-				@groups[name] = LiveData::LiveDataGroup.new( self, name )
+				@groups[name] = LiveData::Group.new( self, name )
 			end
 			return @groups[name]
 		end
@@ -41,24 +41,24 @@ module LiveData
 			@users[name].destroy()
 		end
 
-		def get_user( name )
+		def get_user( name, create_user = true )
 			user = @users[name]
-		#	unless( user )
-		#		user = register_user( name )
-		#	end
+			unless( create_user and user )
+				user = register_user( name )
+			end
 			return user
 		end
 
-		def get_group( name )
+		def get_group( name, create_group = true )
 			group = @groups[name]
-			unless( group )
+			unless( create_group and group )
 				group = register_group( name )
 			end
 			return group
 		end
 
 		def destroy
-			LiveData::Places.delete( @name )
+			LiveData::Channels.delete( @name )
 			@users.each{|name,obj|
 				obj.destroy()
 			}

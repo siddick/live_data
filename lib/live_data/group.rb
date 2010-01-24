@@ -1,7 +1,7 @@
 module LiveData
-	class LiveDataGroup
-		def initialize( place, name )
-			@place = place
+	class Group
+		def initialize( channel, name )
+			@channel = channel
 			@name  = name
 			@users = {}
 		end
@@ -22,14 +22,14 @@ module LiveData
 
 		def register_user( user )
 			if( user.class = String )
-				user = @place.get_user( user )
+				user = @channel.get_user( user )
 			end
 			user.add_group_name( @name, self )
 		end
 
 		def unregister_user( user )
 			if( user.class = String )
-				user = @place.get_user( user )
+				user = @channel.get_user( user )
 			end
 			user.remove_group_name( @name )
 		end
@@ -46,7 +46,7 @@ module LiveData
 			@users.each{|user_name, user|
 				user.remove_group_name( @name )
 			}
-			@place.remove_group_name( @name )
+			@channel.remove_group_name( @name )
 		end
 	end
 end

@@ -1,26 +1,26 @@
 # LiveData
 
-require 'live_data_place'
-require 'live_data_user'
-require 'live_data_group'
+require 'live_data/channel'
+require 'live_data/user'
+require 'live_data/group'
 module LiveData
-	Places 		= {}
+	Channels 		= {}
 
 	def self.register( name )
-		Places[name] = LiveDataPlace.new( name )
+		Channels[name] = LiveData::Channel.new( name )
 	end
 
 	def self.un_register( name )
-		place = self.get()
-		place.destroy()
+		channel = self.get()
+		channel.destroy()
 	end
 
 	def self.get( name )
-		place = Places[name]
-		unless( place )
-			place = LiveData.register( name )
+		channel = Channels[name]
+		unless( channel )
+			channel = LiveData.register( name )
 		end
-		return place
+		return channel
 	end
 	
 end

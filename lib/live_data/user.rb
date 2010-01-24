@@ -1,11 +1,16 @@
 
 module LiveData
-	class LiveDataUser
-		def initialize( place, name )
-			@place = place
-			@name  = name
+	class User
+		def initialize( channel, name )
+			@channel 	= channel
+			@name  		= name
 			@read_pipe, @write_pipe = IO.pipe
-			@groups = {}
+			@groups 		= {}
+		end
+
+		def reset
+			@write_pipe.close
+			@read_pipe, @write_pipe = IO.pipe
 		end
 
 		def get_name
@@ -14,7 +19,7 @@ module LiveData
 
 		def clean
 			begin
-				while( @read_pipe.read_nonblock( 100000 ) )
+				while( @read_pipe.read_nonblock( 10000 ) )
 				end
 			rescue => err
 			end
@@ -38,7 +43,7 @@ module LiveData
 
 		def register_group( group )
 			if( group.class = String )
-				group = @place.get_group( group )
+				group = @channel.get_group( group )
 			end
 			group.add_user_name( @name, self )
 			@groups.delete( group.get_name() )
@@ -46,7 +51,7 @@ module LiveData
 
 		def unregister_group( group )
 			if( group.class = String )
-				group = @place.get_group( group )
+				group = @channel.get_group( group )
 			end
 			group.remove_user_name( @name )
 			@groups[ group.get_name() ] = group 
@@ -66,7 +71,7 @@ module LiveData
 			}
 			@read_pipe.close()
 			@write_pipe.close()
-			@place.remove_user_name( user )
+			@channel.remove_user_name( user )
 		end
 
 	end

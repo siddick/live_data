@@ -1,6 +1,6 @@
 
 module LiveData
-	module LiveDataViewHelper
+	module ViewHelper
 		def call_live_data( config = {} )
 			success_delay = config[:success_delay] || 0
 			failure_delay = config[:failure_delay] || -1
