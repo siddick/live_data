@@ -1,6 +1,7 @@
 == LiveData
   LiveData is a Rails Plugin. This plugim can be used to implement the applications like chat, live process montior, etc.,
 
+
 == Installation
   Step 1 :-
 	./script/plugin install git://github.com/siddick/LiveData.git
