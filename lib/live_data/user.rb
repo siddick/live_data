@@ -3,7 +3,7 @@ module LiveData
    class User
 
       IntegerPackCode = "I"
-      ReadTime        = 30
+      ReadTime        = 25
 
       attr :groups, true
       attr :name, true
@@ -11,8 +11,8 @@ module LiveData
       # Create a user object
       def initialize( name = nil, channel = nil )
          @name      = name || self
-    @channel   = channel
-    @read_time = ReadTime
+         @channel   = channel
+         @read_time = ReadTime
          @lock      = Mutex.new
          @read_pipe, @write_pipe = IO.pipe
          @groups       = []

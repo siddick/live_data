@@ -7,6 +7,8 @@ require 'live_data/version'
 require 'live_data/channel'
 require 'live_data/user'
 require 'live_data/group'
+require 'live_data/thread_watch'
+
 module LiveData
    Channels    = {}
 

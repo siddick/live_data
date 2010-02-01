@@ -35,13 +35,6 @@ module LiveData
          }
       end
 
-      # Write data, which contain json format
-      def write_json( json_data )
-         @users.each{|user|
-            user.write_json( json_data )
-         }
-      end
-
       # Write any object
       def write( data )
          @users.each{|user|

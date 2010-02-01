@@ -1,3 +1,7 @@
+* v0.2.4
+	1. LiveData::ThreadWatch module is implemented. 
+	2. default ReadTime and WaitTime is set to 25
+	3. write_json method is removed from Channel class
 * v0.2.3
 	1. Make the live data compartable to ruby 1.8.x 
 * v0.2.2
