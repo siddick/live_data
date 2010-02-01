@@ -1,53 +1,69 @@
 module LiveData
-	class Group
-		def initialize( channel, name )
-			@channel = channel
-			@name  = name
-			@users = {}
-		end
 
-		def get_name
-			@name
-		end
-		
-		def write_json( json_cont )
-			@users.each{|username, user|
-				user.write_json( json_cont )
-			}
-		end
+   # Group is used to maintain collection of users
+   # ==== Example 
+   #
+   #    chat     = LiveData::Channel.new
+   #    guest1   = chat.create_user('guest1')
+   #    guest2   = chat.create_user('guest2')
+   #   user_grp = chat.create_group('user')
+   #
+   #   user_grp.add_user( guest1 )
+   #   user_grp.add_user( guest2 )
+   #
+   #   user_grp.write( { :title => "Greeting", 
+   #      :message => "Wecome to LiveData" } )
+   #
+   #   group1.read      #  { :title => "Greeti..... }
+   #   group2.read      #  { :title => "Greeti..... }
+   class Group
 
-		def write( cont )
-			write_json( cont.to_json )
-		end
+      attr :users, :name
 
-		def register_user( user )
-			if( user.class = String )
-				user = @channel.get_user( user )
-			end
-			user.add_group_name( @name, self )
-		end
+      # Create a group
+      def initialize( name = nil )
+         @name = name || self
+         @users = []
+      end
 
-		def unregister_user( user )
-			if( user.class = String )
-				user = @channel.get_user( user )
-			end
-			user.remove_group_name( @name )
-		end
+      # Write data, which contain yaml format
+      def write_yaml( yaml_data )
+         @users.each{|user|
+            user.write_yaml( yaml_data )
+         }
+      end
 
-		def add_user_name( user_name, user )
-			@users[user_name] = user
-		end
+      # Write data, which contain json format
+      def write_json( json_data )
+         @users.each{|user|
+            user.write_json( json_data )
+         }
+      end
 
-		def remove_user_name( user_name )
-			@users.delete( user_name )
-		end
+      # Write any object
+      def write( data )
+         @users.each{|user|
+            user.write( data )
+         }
+      end
 
-		def destroy
-			@users.each{|user_name, user|
-				user.remove_group_name( @name )
-			}
-			@channel.remove_group_name( @name )
-		end
-	end
+      # Add user to the group
+      def add_user( user )
+         @users.push( user )
+         user.groups.push( self )
+      end
+
+      # Delete user from the group
+      def remove_user( user )
+         @users.delete( user )
+         user.groups.delete( self )
+      end
+
+      def destroy
+         @users.each{|user|
+            user.groups.delete( self )
+         }
+      end
+   end
 end
 

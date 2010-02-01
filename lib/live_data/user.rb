@@ -1,78 +1,89 @@
 
 module LiveData
-	class User
-		def initialize( channel, name )
-			@channel 	= channel
-			@name  		= name
-			@read_pipe, @write_pipe = IO.pipe
-			@groups 		= {}
-		end
+   class User
 
-		def reset
-			@write_pipe.close
-			@read_pipe, @write_pipe = IO.pipe
-		end
+      IntegerPackCode = "I"
 
-		def get_name
-			@name
-		end
+      attr :groups, :name
 
-		def clean
-			begin
-				while( @read_pipe.read_nonblock( 10000 ) )
-				end
-			rescue => err
-			end
-		end
+      # Create a user object
+      def initialize( name = nil )
+         @name = name || self
+         @lock                     = Mutex.new
+         @read_pipe, @write_pipe = IO.pipe
+         @groups       = []
+      end
 
-		def read_json
-			@read_pipe.gets()
-		end
+      # Reset the write pipe and read pipe
+      def reset
+         begin
+            @write_pipe.close
+            @read_pipe.close
+         rescue => err
+         end
+         @read_pipe, @write_pipe = IO.pipe
+      end
 
-		def read
-			 ActiveSupport::JSON.decode( read_json() )
-		end
+      # Clean the Contain in the pipe
+      def clean
+         begin
+            while( @read_pipe.read_nonblock( 10000 ) )
+            end
+         rescue => err
+         end
+      end
 
-		def write_json( json_cont )
-			@write_pipe.write( json_cont + "\n" )			
-		end
+      # Read json contain
+      def read_json
+         @read_pipe.gets()
+      end
 
-		def write( cont )
-			write_json( cont.to_json )
-		end
+      # Read yaml contain
+      def read_yaml
+         len, etc = @read_pipe.read(4).unpack( IntegerPackCode )
+         @read_pipe.read( len )
+      end
 
-		def register_group( group )
-			if( group.class = String )
-				group = @channel.get_group( group )
-			end
-			group.add_user_name( @name, self )
-			@groups.delete( group.get_name() )
-		end
+      # read a Object
+      def read
+          YAML.load( read_yaml )
+      end
 
-		def unregister_group( group )
-			if( group.class = String )
-				group = @channel.get_group( group )
-			end
-			group.remove_user_name( @name )
-			@groups[ group.get_name() ] = group 
-		end
+      # Write a string, which contain json format
+      # ==== Parameters
+      # * +json_data+ - json string
+      def write_json( json_data )
+         @write_pipe.write( json_data + "\n" )         
+      end
 
-		def remove_group_name( name )
-			@groups.delete( name )
-		end
+      # Write a string, which contain yam format
+      # ==== Parameters
+      # * +yaml_data+ - yaml string
+      def write_yaml( yaml_data )
+         return unless yaml_data and yaml_data.class == String
+         len = [ yaml_data.length ].pack( IntegerPackCode )
+         @write_pipe.write( len )
+         @write_pipe.write( yaml_data )
+      end
 
-		def add_group_name( name, group )
-			@groups[name] = group 
-		end
+      # Write a Object
+      # ==== Parameters
+      # * +data+ - any Object
+      def write( data )
+         write_yaml( data.to_yaml )
+      end
 
-		def destroy
-			@groups.each{|group_name,group|
-				group.remove_user_name( @name )
-			}
-			@read_pipe.close()
-			@write_pipe.close()
-			@channel.remove_user_name( user )
-		end
+      # Destroy the user
+      def destroy
+         @groups.dup.each{|grp|
+            grp.remove_user( self )
+         }
+         begin
+            @read_pipe.close
+            @write_pipe.close
+         rescue => err
+         end
+      end
 
-	end
+   end
 end
