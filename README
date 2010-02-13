@@ -1,10 +1,11 @@
 == LiveData
-  LiveData is a Rails Plugin. This plugim can be used to implement the applications like chat, live process montior, etc.,
+  LiveData is a rubygem. This gem is used to implement the applications like chat, live process montior, etc.,
 
 
 == Installation
   Step 1 :-
-	./script/plugin install git://github.com/siddick/LiveData.git
+  	Add the livedata gem in config/environment.rb
+		  config.gem "livedata"
   Step 2 :-
 	Add the following configuration in the config/environments/development.rb, config/environments/production.rb and config/environments/test.rb
 		config.threadsafe!
