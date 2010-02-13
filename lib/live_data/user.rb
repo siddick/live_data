@@ -7,8 +7,9 @@ module LiveData
       attr :groups, :name
 
       # Create a user object
-      def initialize( name = nil )
-         @name = name || self
+      def initialize( name = nil, channel = nil )
+         @name    = name || self
+	 @channel = channel
          @lock                     = Mutex.new
          @read_pipe, @write_pipe = IO.pipe
          @groups       = []
@@ -78,6 +79,10 @@ module LiveData
          @groups.dup.each{|grp|
             grp.remove_user( self )
          }
+	 if( @channel )
+		 @channel.users.delete( @name )
+		 @channel.user_in_groups.delete( @name )
+	 end
          begin
             @read_pipe.close
             @write_pipe.close

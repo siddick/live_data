@@ -3,11 +3,12 @@
 require 'thread'
 require 'yaml'
 require 'json'
+
+require 'live_data/version'
 require 'live_data/channel'
 require 'live_data/user'
 require 'live_data/group'
 module LiveData
-   VERSION      = '0.2.1'
    Channels    = {}
 
    def self.create_channel( name )

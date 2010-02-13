@@ -14,16 +14,18 @@
 
 	  def get_msg
 	    user_id = params[:id] || "test"
-	    chat = LiveData.get('chat')
-	    user = chat.get_user( user_id )
+	    chat = LiveData.get_channel('chat') || LiveData.create_channel('chat')
+	    user = chat.get_user( user_id ) || chat.create_user( user_id )
 	    render :text => user.read
 	  end
 
 	  def send_msg
 	    user_id = params[:id] || "test"
 	    message = params[:msg] || "Nothing"
-	    chat = LiveData.get('chat')
-	    user = chat.get_user( user_id )
+
+	    chat = LiveData.get_channel('chat') || LiveData.create_channel('chat')
+	    user = chat.get_user( user_id ) || chat.create_user( user_id )
+
 	    user.write( message )
 	    render :text => 'Finesh'
 	  end

@@ -21,8 +21,9 @@ module LiveData
       attr :users, :name
 
       # Create a group
-      def initialize( name = nil )
-         @name = name || self
+      def initialize( name = nil, channel = nil )
+         @name    = name || self
+	 @channel = channel
          @users = []
       end
 
@@ -63,6 +64,10 @@ module LiveData
          @users.each{|user|
             user.groups.delete( self )
          }
+	 if( @channel )
+		 @channel.groups.delete( @name ) 
+		 @channel.group_have_users.delete( @name )
+	 end
       end
    end
 end

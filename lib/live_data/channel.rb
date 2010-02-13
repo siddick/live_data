@@ -47,7 +47,7 @@ module LiveData
       # * +name+   - User name 
       def create_user( name )
          unless( @users[name] ) 
-            @users[name] = LiveData::User.new( name )
+            @users[name] = LiveData::User.new( name, self )
             @user_in_groups[name] = @users[name].groups
          end
          return @users[name]
@@ -58,7 +58,7 @@ module LiveData
       # * +name+    - Group name
       def create_group( name )
          unless( @groups[name] ) 
-            @groups[name] = LiveData::Group.new( name )
+            @groups[name] = LiveData::Group.new( name, self )
             @group_have_users[name] = @groups[name].users
          end
          return @groups[name]
@@ -71,7 +71,7 @@ module LiveData
 
       # Get group object
       def get_group( name )
-         @users[name]
+         @groups[name]
       end
 
       # Destroy a user
