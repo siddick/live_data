@@ -50,8 +50,10 @@ module LiveData
 
       # Add user to the group
       def add_user( user )
-         @users.push( user )
-         user.groups.push( self )
+         if( !@users.include?(user))
+            @users.push( user )
+            user.groups.push( self )
+         end
       end
 
       # Delete user from the group

@@ -60,8 +60,14 @@ class LiveDataTest < Test::Unit::TestCase
 		data    = { :title => "Greating", :message => "Welcome you all" }
 		data1   = { :title => "Greating1", :message => "Welcome you all" }
 		data2   = { :title => "Greating2", :message => "Welcome you all" }
+
 		grp.add_user( guest1 )
+		assert grp.users.size == 1
+		grp.add_user( guest1 )	# Duplicate user 
+		assert grp.users.size == 1
+
 		grp.add_user( guest2 )
+		assert grp.users.size == 2
 
 		guest1.write( data )
 		assert data == guest1.read
@@ -76,5 +82,15 @@ class LiveDataTest < Test::Unit::TestCase
 		assert data2 == guest1.read
 		assert data2 == guest2.read
 
+	end
+
+	def test_read_time
+		chat 	= LiveData.create_channel( 'chat' )
+		guest1 	= chat.create_user( 'guest1' )
+		guest1.set_read_time( 2 )
+		assert guest1.read == nil
+
+		guest1.write( "hai" )
+		assert guest1.read == "hai"
 	end
 end

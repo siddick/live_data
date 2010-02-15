@@ -1,0 +1,6 @@
+* v0.2.2
+	1. New method set_read_time in User class.
+	2. handle read & write locking in User class.
+	3. write_json and read_json methods are removed from the User class.
+	4. Default ReadTime is set to 30 seconds.
+	5. handle the user list in group

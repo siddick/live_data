@@ -2,7 +2,6 @@
 
 require 'thread'
 require 'yaml'
-require 'json'
 
 require 'live_data/version'
 require 'live_data/channel'
