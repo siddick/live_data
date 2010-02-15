@@ -18,7 +18,8 @@ module LiveData
    #   group2.read      #  { :title => "Greeti..... }
    class Group
 
-      attr :users, :name
+      attr :users, true
+      attr :name, true
 
       # Create a group
       def initialize( name = nil, channel = nil )

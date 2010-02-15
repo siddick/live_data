@@ -5,7 +5,8 @@ module LiveData
       IntegerPackCode = "I"
       ReadTime        = 30
 
-      attr :groups, :name
+      attr :groups, true
+      attr :name, true
 
       # Create a user object
       def initialize( name = nil, channel = nil )

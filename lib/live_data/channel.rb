@@ -4,7 +4,11 @@ module LiveData
    # Channel is used to maintain users, groups and user-group relation
    class Channel
 
-      attr :users, :groups, :user_in_groups, :group_have_users, :name
+      attr :users, true
+      attr :groups, true
+      attr :user_in_groups, true
+      attr :group_have_users, true
+      attr :name, true
 
       # Create a new channel
       def initialize( name = nil )
@@ -100,3 +104,4 @@ module LiveData
       end
    end
 end
+
