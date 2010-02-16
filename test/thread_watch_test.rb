@@ -18,4 +18,14 @@ class ThreadWatchTest < Test::Unit::TestCase
 		assert LiveData::ThreadWatch.wait('guest', 5 ) >= 5
 		th.join
 	end
+
+	def test_own_object 
+		threads  = {}
+		th = Thread.new{ 
+			sleep(6)
+			LiveData::ThreadWatch.wakeup('guest', threads )
+		}
+		assert LiveData::ThreadWatch.wait('guest', 10 , threads ) < 10
+		th.join
+	end
 end

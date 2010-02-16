@@ -4,13 +4,13 @@ module LiveData
       WaitTime    = 25
       UserThreads = {}
 
-      def self.wait( user_id, time = WaitTime )
+      def self.wait( user_id, time = WaitTime, user_threads = UserThreads )
          already_use = false
          Lock.synchronize {
-            if( UserThreads[user_id] )
+            if( user_threads[user_id] )
                already_use = true
             else
-               UserThreads[user_id] = Thread.current
+               user_threads[user_id] = Thread.current
             end
          }
          if( already_use )
@@ -18,14 +18,14 @@ module LiveData
          end
          used_time = sleep(time )
          Lock.synchronize {
-            UserThreads.delete( user_id )
+            user_threads.delete( user_id )
          }
          return used_time
       end
 
-      def self.wakeup( user_id )
+      def self.wakeup( user_id , user_threads = UserThreads )
          Lock.synchronize {
-            uthread = UserThreads[user_id]
+            uthread = user_threads[user_id]
             if( uthread )
                uthread.wakeup
                return true
