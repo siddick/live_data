@@ -79,11 +79,11 @@ module LiveData
       # * +yaml_data+ - yaml string
       def write_yaml( yaml_data )
          return unless yaml_data and yaml_data.class == String
-    len = [ yaml_data.length ].pack( IntegerPackCode )
-    @lock.synchronize {
-       @write_pipe.write( len )
-       @write_pipe.write( yaml_data )
-    }
+         len = [ yaml_data.length ].pack( IntegerPackCode )
+         @lock.synchronize {
+            @write_pipe.write( len )
+            @write_pipe.write( yaml_data )
+         }
       end
 
       # Write a Object
@@ -98,10 +98,10 @@ module LiveData
          @groups.dup.each{|grp|
             grp.remove_user( self )
          }
-    if( @channel )
-       @channel.users.delete( @name )
-       @channel.user_in_groups.delete( @name )
-    end
+         if( @channel )
+           @channel.users.delete( @name )
+           @channel.user_in_groups.delete( @name )
+         end
          begin
             @read_pipe.close
             @write_pipe.close

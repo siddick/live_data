@@ -16,7 +16,7 @@ module LiveData
          if( already_use )
             return nil
          end
-         used_time = sleep(time )
+         used_time = sleep( time )
          Lock.synchronize {
             user_threads.delete( user_id )
          }

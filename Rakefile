@@ -32,7 +32,7 @@ Rake::RDocTask.new(:rdoc) do |rdoc|
   rdoc.rdoc_files.include('lib/**/*.rb')
 end
 
-dist_dirs = [ "lib", "test", "examples" ]
+dist_dirs = [ "lib", "test", "examples", "app", "config" ]
 
 spec = Gem::Specification.new do |s|
 	s.platform = Gem::Platform::RUBY

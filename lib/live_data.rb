@@ -3,14 +3,20 @@
 require 'thread'
 require 'yaml'
 
-require 'live_data/version'
-require 'live_data/channel'
-require 'live_data/user'
-require 'live_data/group'
-require 'live_data/thread_watch'
 
 module LiveData
    Channels    = {}
+
+   autoload :Version, 'live_data/version'
+   autoload :Channel, 'live_data/channel'
+   autoload :User, 'live_data/user'
+   autoload :Group, 'live_data/group'
+   autoload :ThreadWatch, 'live_data/thread_watch'
+
+   if( defined?(Rails::Engine) )
+	   class Engine < Rails::Engine
+	   end
+   end
 
    def self.create_channel( name )
       unless( Channels[name] )

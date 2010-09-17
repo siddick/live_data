@@ -2,16 +2,18 @@
   LiveData is a rubygem. This gem is used to implement the applications like chat, live process montior, etc.,
 
 
-
-== Installation
+== Rails2 Installation
   Step 1 :-
+  	Install the gem
+	gem install livedata
+  Step 2 :-
   	Add the livedata gem in config/environment.rb
 		  config.gem "livedata"
-  Step 2 :-
+  Step 3 :-
 	Add the following configuration in the config/environments/development.rb, config/environments/production.rb and config/environments/test.rb
 		config.threadsafe!
 
-== Example
+== Rails2 Example
 	Class MainController < ApplicationController
 
 	  def get_msg
@@ -42,3 +44,26 @@
 		Second Tab :-
 			http://localhost:3000/main/send_msg/tester?msg=Hello World
 
+== Rails3 Installation
+   Step 1 :-
+   	Add the following line in the Gemfile
+		gem 'livedata', '>= 0.3.0'
+   Step 2 :-
+  	Install the gem, execute the following command  
+		bundle install
+
+== Rails3 Example 
+   The livedata gem contain, configurations, controller and routine.
+   Execute the following command to find the services, that already present.
+   	rake routes
+   == Run web server	
+   	rails s -b 0.0.0.0 -p 3000
+   == Browser 
+  	Open two tabs in the web browser 
+	First tab :-
+		http://localhost:3000/live_data/chat/guest.xml
+	Second tab :-
+		http://localhost:3000/live_data/chat/guest/put?message=Hello World
+	
+== Bugs
+	Report the bug on http://github.com/siddick/live_data/issues
