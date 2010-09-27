@@ -28,4 +28,31 @@ class ThreadWatchTest < Test::Unit::TestCase
 		assert LiveData::ThreadWatch.wait('guest', 10 , threads ) < 10
 		th.join
 	end
+
+	def test_read_write_process
+		content = "Testing"
+		LiveData::ThreadWatch.write( 'guest', content )
+		assert_equal LiveData::ThreadWatch.read( 'guest' ), content
+		assert_equal LiveData::ThreadWatch.read( 'guest', 10 ), nil
+	end
+
+	def test_read_write_process2
+		content  = { :hai => "testing" }
+		content2 = "Testing2"
+		Thread.new {
+			sleep(4)
+			LiveData::ThreadWatch.write( 'guest', content )
+			LiveData::ThreadWatch.write( 'guest', content2 )
+		}
+		assert_equal LiveData::ThreadWatch.read( 'guest', 10 ), content
+		assert_equal LiveData::ThreadWatch.read( 'guest', 10 ), content2
+		assert_equal LiveData::ThreadWatch.read( 'guest', 2 ), nil
+	end
+
+	def test_clear
+		content  = { :hai => "testing" }
+		LiveData::ThreadWatch.write( 'guest', content )
+		LiveData::ThreadWatch.clear( 'guest' )
+		assert_equal LiveData::ThreadWatch.read( 'guest', 2 ), nil 
+	end
 end
